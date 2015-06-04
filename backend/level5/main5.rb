@@ -1,21 +1,5 @@
-require "json"
+require "../io_operations"
 require "../rental_calc"
-
-# data.json
-READ_FILE = 'data.json'
-
-# output.json
-WRITE_FILE = 'output.json'
-
-# Loads the JSON data
-def load_data
-  JSON.parse(IO.read(READ_FILE))
-end
-
-# Writes the Output into a JSON Data
-def write_data(output)
-  IO.write( WRITE_FILE, JSON.pretty_generate(output))
-end
 
 def correspondent_payment(who, amount)  
   who == "driver" ? type = "debit" : type = "credit"
@@ -23,7 +7,7 @@ def correspondent_payment(who, amount)
 end
 
 def main5
-  hash = load_data
+  hash = IOOperations.load_data
   output = {"rentals": []}
   hash["rentals"].each do |rental|
     number_of_days = RentalCalc.number_of_days(rental)
@@ -45,7 +29,7 @@ def main5
                                     correspondent_payment("assistance", commissions[:assistance_fee]),
                                     correspondent_payment("drivy", drivy_total_fee)]} 
   end
-  write_data(output)
+  IOOperations.write_data(output)
 end
 
 # Run the main function
